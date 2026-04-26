@@ -15,6 +15,12 @@ export const productsRoutes: Routes = [
       import('./containers/products-form-page/products-form-page.component').then(m => m.ProductsFormPageComponent),
   },
   {
+    path: 'import',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./containers/import-products-page/import-products-page.component').then(m => m.ImportProductsPageComponent),
+  },
+  {
     path: 'edit/:id',
     canActivate: [authGuard],
     loadComponent: () =>

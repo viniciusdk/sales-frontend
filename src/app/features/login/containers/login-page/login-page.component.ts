@@ -11,202 +11,260 @@ import { ToastService } from '../../../../core/services/toast.service';
     <div class="login-shell">
       <div class="bg-blob bg-blob-1"></div>
       <div class="bg-blob bg-blob-2"></div>
-      <div class="bg-blob bg-blob-3"></div>
+
+      <!-- Falling petals -->
+      @for (p of petals; track p.id) {
+        <div class="petal-wrap" [style.left]="p.left + '%'" [style.animation-duration]="p.dur + 's'" [style.animation-delay]="p.delay + 's'">
+          <svg [attr.width]="p.size" [attr.height]="p.size * 1.4" viewBox="0 0 20 28">
+            <defs>
+              <linearGradient [attr.id]="'fpg' + p.id" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" [attr.stop-color]="p.color" stop-opacity="0.9"/>
+                <stop offset="100%" [attr.stop-color]="p.color" stop-opacity="0.25"/>
+              </linearGradient>
+            </defs>
+            <path [attr.d]="'M10,26 C4,20 2,12 10,2 C18,12 16,20 10,26'" [attr.fill]="'url(#fpg' + p.id + ')'" [attr.transform]="'rotate(' + p.rot + ',10,14)'"/>
+          </svg>
+        </div>
+      }
 
       <div class="login-card animate-in">
 
-        <!-- ── Floral header ── -->
+        <!-- Botanical floral header -->
         <div class="card-header">
+          <svg class="login-floral" viewBox="0 0 430 210" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="lhBg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f5eeff"/><stop offset="100%" stop-color="#ddc8f8"/>
+              </linearGradient>
+              <linearGradient id="lhFade" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="50%" stop-color="rgba(255,255,255,0)"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0.97)"/>
+              </linearGradient>
+              <!-- Magnolia petal gradient -->
+              <radialGradient id="pg1" cx="50%" cy="75%" r="80%">
+                <stop offset="0%" stop-color="#E8D8FF"/>
+                <stop offset="35%" stop-color="#9B4DB3"/>
+                <stop offset="75%" stop-color="#6A2080"/>
+                <stop offset="100%" stop-color="#3E0F58"/>
+              </radialGradient>
+              <radialGradient id="pg2" cx="50%" cy="75%" r="80%">
+                <stop offset="0%" stop-color="#F0E4FF"/>
+                <stop offset="40%" stop-color="#B870D8"/>
+                <stop offset="100%" stop-color="#7A2A98"/>
+              </radialGradient>
+              <radialGradient id="cg1" cx="45%" cy="45%" r="60%">
+                <stop offset="0%" stop-color="#FFFDE0"/>
+                <stop offset="60%" stop-color="#F5D860"/>
+                <stop offset="100%" stop-color="#C8A820"/>
+              </radialGradient>
+              <!-- Small blossom gradient -->
+              <radialGradient id="bg1" cx="50%" cy="70%" r="75%">
+                <stop offset="0%" stop-color="#EEE0FF"/>
+                <stop offset="45%" stop-color="#9B50C8"/>
+                <stop offset="100%" stop-color="#5A1880"/>
+              </radialGradient>
+            </defs>
+            <rect width="430" height="210" fill="url(#lhBg)"/>
 
-          <!-- Left botanical cluster -->
-          <svg class="floral floral-left" viewBox="0 0 170 150" xmlns="http://www.w3.org/2000/svg">
-            <!-- Large filled wave sweeping from top-left -->
-            <path d="M0,0 L170,0 C148,4 122,2 100,12 C78,22 66,40 48,48 C32,55 14,52 6,64 C0,72 0,85 0,95 Z"
-                  fill="white" opacity="0.22"/>
-            <!-- Secondary wave for depth -->
-            <path d="M0,0 C45,6 78,4 95,22 C112,40 104,62 88,72 C72,82 48,78 32,90 C18,100 10,118 0,128 Z"
-                  fill="white" opacity="0.11"/>
+            <!-- Decorative background arcs -->
+            <ellipse cx="80" cy="90" rx="70" ry="70" fill="none" stroke="#9B4DB3" stroke-width="0.5" opacity="0.12"/>
+            <ellipse cx="350" cy="90" rx="70" ry="70" fill="none" stroke="#9B4DB3" stroke-width="0.5" opacity="0.12"/>
+            <ellipse cx="215" cy="30" rx="50" ry="50" fill="none" stroke="#7B2D8B" stroke-width="0.5" opacity="0.1"/>
 
-            <!-- Main curving stem -->
-            <path d="M6,64 C4,80 2,96 8,108 C14,120 26,124 30,114"
-                  stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.65"/>
-            <!-- Large spiral at stem end (nautilus style) -->
-            <path d="M30,114 C36,104 46,102 50,110 C54,118 48,128 40,126 C32,124 28,114 34,108 C40,102 50,102 54,110 C58,118 52,130 42,130"
-                  stroke="white" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+            <!-- Left stem -->
+            <path d="M-2,210 C12,178 10,145 22,116 C36,82 58,68 76,44" stroke="#3D7A50" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <path d="M40,138 C56,118 72,112 80,92" stroke="#3D7A50" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+            <path d="M22,116 C6,96 2,74 14,58" stroke="#3D7A50" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+            <!-- Left leaves -->
+            <g transform="translate(40,138)">
+              <path d="M0,0 C11.16,-10.08 13.65,-21.28 0,-28 C-13.65,-21.28 -11.16,-10.08 0,0" fill="#52A868" opacity="0.9" transform="rotate(-42)"/>
+              <line x1="0" y1="-2" x2="0" y2="-24.08" stroke="#2F6038" stroke-width="0.9" opacity="0.45" transform="rotate(-42)"/>
+            </g>
+            <g transform="translate(22,116)">
+              <path d="M0,0 C8.68,-7.92 10.92,-16.72 0,-22 C-10.92,-16.72 -8.68,-7.92 0,0" fill="#458C58" opacity="0.9" transform="rotate(38)"/>
+            </g>
+            <g transform="translate(14,58)">
+              <path d="M0,0 C7.02,-6.48 9.36,-13.68 0,-18 C-9.36,-13.68 -7.02,-6.48 0,0" fill="#52A868" opacity="0.9" transform="rotate(-20)"/>
+            </g>
+            <!-- Left main magnolia at (76,44) -->
+            <g transform="translate(76,44)">
+              <!-- Outer petals shadow -->
+              <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="#3E0F58" opacity="0.12" transform="rotate(0) translate(0,2)"/>
+              <!-- Outer 6 petals -->
+              <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(0)"/>
+              <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(60)"/>
+              <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(120)"/>
+              <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(180)"/>
+              <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(240)"/>
+              <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(300)"/>
+              <!-- Inner 6 petals -->
+              <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(30)"/>
+              <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(90)"/>
+              <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(150)"/>
+              <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(210)"/>
+              <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(270)"/>
+              <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(330)"/>
+              <!-- Center -->
+              <circle r="6.96" fill="url(#cg1)"/>
+              <circle r="4.06" fill="#E8C820" opacity="0.9"/>
+            </g>
+            <!-- Left blossom at (80,92) — 5 petals -->
+            <g transform="translate(80,92)">
+              <path d="M0,0 C-4.16,-3.12 -5.72,-7.8 -2.34,-11.44 C0,-13 2.34,-11.44 5.72,-7.8 C4.16,-3.12 0,0" fill="url(#bg1)" opacity="0.88" transform="rotate(0)"/>
+              <path d="M0,0 C-4.16,-3.12 -5.72,-7.8 -2.34,-11.44 C0,-13 2.34,-11.44 5.72,-7.8 C4.16,-3.12 0,0" fill="url(#bg1)" opacity="0.88" transform="rotate(72)"/>
+              <path d="M0,0 C-4.16,-3.12 -5.72,-7.8 -2.34,-11.44 C0,-13 2.34,-11.44 5.72,-7.8 C4.16,-3.12 0,0" fill="url(#bg1)" opacity="0.88" transform="rotate(144)"/>
+              <path d="M0,0 C-4.16,-3.12 -5.72,-7.8 -2.34,-11.44 C0,-13 2.34,-11.44 5.72,-7.8 C4.16,-3.12 0,0" fill="url(#bg1)" opacity="0.88" transform="rotate(216)"/>
+              <path d="M0,0 C-4.16,-3.12 -5.72,-7.8 -2.34,-11.44 C0,-13 2.34,-11.44 5.72,-7.8 C4.16,-3.12 0,0" fill="url(#bg1)" opacity="0.88" transform="rotate(288)"/>
+              <circle r="3.38" fill="#FFF8D0" opacity="0.95"/>
+              <circle r="1.82" fill="#E8C030" opacity="0.9"/>
+            </g>
+            <!-- Small blossom at (14,58) -->
+            <g transform="translate(14,58)">
+              <path d="M0,0 C-2.72,-2.04 -3.74,-5.1 -1.53,-7.48 C0,-8.5 1.53,-7.48 3.74,-5.1 C2.72,-2.04 0,0" fill="url(#bg1)" opacity="0.8" transform="rotate(0)"/>
+              <path d="M0,0 C-2.72,-2.04 -3.74,-5.1 -1.53,-7.48 C0,-8.5 1.53,-7.48 3.74,-5.1 C2.72,-2.04 0,0" fill="url(#bg1)" opacity="0.8" transform="rotate(72)"/>
+              <path d="M0,0 C-2.72,-2.04 -3.74,-5.1 -1.53,-7.48 C0,-8.5 1.53,-7.48 3.74,-5.1 C2.72,-2.04 0,0" fill="url(#bg1)" opacity="0.8" transform="rotate(144)"/>
+              <path d="M0,0 C-2.72,-2.04 -3.74,-5.1 -1.53,-7.48 C0,-8.5 1.53,-7.48 3.74,-5.1 C2.72,-2.04 0,0" fill="url(#bg1)" opacity="0.8" transform="rotate(216)"/>
+              <path d="M0,0 C-2.72,-2.04 -3.74,-5.1 -1.53,-7.48 C0,-8.5 1.53,-7.48 3.74,-5.1 C2.72,-2.04 0,0" fill="url(#bg1)" opacity="0.8" transform="rotate(288)"/>
+              <circle r="2.21" fill="#FFF8D0" opacity="0.95"/>
+            </g>
+            <!-- Bud -->
+            <ellipse cx="58" cy="62" rx="5" ry="10" fill="#9B4DB3" opacity="0.65"/>
+            <ellipse cx="58" cy="62" rx="3" ry="6" fill="#C8A0E8" opacity="0.55"/>
 
-            <!-- Branch to the right -->
-            <path d="M48,48 C62,38 78,40 76,52 C74,62 60,64 52,58"
-                  stroke="white" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.55"/>
-            <!-- Spiral on branch -->
-            <path d="M76,52 C84,42 94,44 92,54 C90,62 80,62 76,56 C72,50 76,42 84,42"
-                  stroke="white" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.5"/>
+            <!-- Right side — mirror -->
+            <g transform="translate(430,0) scale(-1,1)">
+              <path d="M-2,210 C12,178 10,145 22,116 C36,82 58,68 76,44" stroke="#3D7A50" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+              <path d="M40,138 C56,118 72,112 80,92" stroke="#3D7A50" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+              <path d="M22,116 C6,96 2,74 14,58" stroke="#3D7A50" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+              <g transform="translate(40,138)">
+                <path d="M0,0 C11.16,-10.08 13.65,-21.28 0,-28 C-13.65,-21.28 -11.16,-10.08 0,0" fill="#52A868" opacity="0.9" transform="rotate(42)"/>
+              </g>
+              <g transform="translate(22,116)">
+                <path d="M0,0 C8.68,-7.92 10.92,-16.72 0,-22 C-10.92,-16.72 -8.68,-7.92 0,0" fill="#458C58" opacity="0.9" transform="rotate(-38)"/>
+              </g>
+              <g transform="translate(14,58)">
+                <path d="M0,0 C7.02,-6.48 9.36,-13.68 0,-18 C-9.36,-13.68 -7.02,-6.48 0,0" fill="#52A868" opacity="0.9" transform="rotate(20)"/>
+              </g>
+              <g transform="translate(76,44)">
+                <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(0)"/>
+                <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(60)"/>
+                <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(120)"/>
+                <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(180)"/>
+                <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(240)"/>
+                <path d="M0,0 C-10.44,-8.7 -16.2,-20.88 -6.96,-31.32 C0,-35.96 6.96,-31.32 16.2,-20.88 C10.44,-8.7 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(300)"/>
+                <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(30)"/>
+                <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(90)"/>
+                <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(150)"/>
+                <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(210)"/>
+                <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(270)"/>
+                <path d="M0,0 C-6.96,-5.8 -10.44,-13.92 -4.64,-20.88 C0,-23.84 4.64,-20.88 10.44,-13.92 C6.96,-5.8 0,0" fill="url(#pg2)" opacity="0.95" transform="rotate(330)"/>
+                <circle r="6.96" fill="url(#cg1)"/>
+                <circle r="4.06" fill="#E8C820" opacity="0.9"/>
+              </g>
+              <g transform="translate(80,92)">
+                <path d="M0,0 C-4.16,-3.12 -5.72,-7.8 -2.34,-11.44 C0,-13 2.34,-11.44 5.72,-7.8 C4.16,-3.12 0,0" fill="url(#bg1)" opacity="0.88" transform="rotate(0)"/>
+                <path d="M0,0 C-4.16,-3.12 -5.72,-7.8 -2.34,-11.44 C0,-13 2.34,-11.44 5.72,-7.8 C4.16,-3.12 0,0" fill="url(#bg1)" opacity="0.88" transform="rotate(72)"/>
+                <path d="M0,0 C-4.16,-3.12 -5.72,-7.8 -2.34,-11.44 C0,-13 2.34,-11.44 5.72,-7.8 C4.16,-3.12 0,0" fill="url(#bg1)" opacity="0.88" transform="rotate(144)"/>
+                <path d="M0,0 C-4.16,-3.12 -5.72,-7.8 -2.34,-11.44 C0,-13 2.34,-11.44 5.72,-7.8 C4.16,-3.12 0,0" fill="url(#bg1)" opacity="0.88" transform="rotate(216)"/>
+                <path d="M0,0 C-4.16,-3.12 -5.72,-7.8 -2.34,-11.44 C0,-13 2.34,-11.44 5.72,-7.8 C4.16,-3.12 0,0" fill="url(#bg1)" opacity="0.88" transform="rotate(288)"/>
+                <circle r="3.38" fill="#FFF8D0" opacity="0.95"/>
+                <circle r="1.82" fill="#E8C030" opacity="0.9"/>
+              </g>
+              <g transform="translate(14,58)">
+                <path d="M0,0 C-2.72,-2.04 -3.74,-5.1 -1.53,-7.48 C0,-8.5 1.53,-7.48 3.74,-5.1 C2.72,-2.04 0,0" fill="url(#bg1)" opacity="0.8" transform="rotate(0)"/>
+                <path d="M0,0 C-2.72,-2.04 -3.74,-5.1 -1.53,-7.48 C0,-8.5 1.53,-7.48 3.74,-5.1 C2.72,-2.04 0,0" fill="url(#bg1)" opacity="0.8" transform="rotate(72)"/>
+                <path d="M0,0 C-2.72,-2.04 -3.74,-5.1 -1.53,-7.48 C0,-8.5 1.53,-7.48 3.74,-5.1 C2.72,-2.04 0,0" fill="url(#bg1)" opacity="0.8" transform="rotate(144)"/>
+                <path d="M0,0 C-2.72,-2.04 -3.74,-5.1 -1.53,-7.48 C0,-8.5 1.53,-7.48 3.74,-5.1 C2.72,-2.04 0,0" fill="url(#bg1)" opacity="0.8" transform="rotate(216)"/>
+                <path d="M0,0 C-2.72,-2.04 -3.74,-5.1 -1.53,-7.48 C0,-8.5 1.53,-7.48 3.74,-5.1 C2.72,-2.04 0,0" fill="url(#bg1)" opacity="0.8" transform="rotate(288)"/>
+                <circle r="2.21" fill="#FFF8D0" opacity="0.95"/>
+              </g>
+              <ellipse cx="58" cy="62" rx="5" ry="10" fill="#9B4DB3" opacity="0.65"/>
+              <ellipse cx="58" cy="62" rx="3" ry="6" fill="#C8A0E8" opacity="0.55"/>
+            </g>
 
-            <!-- Upper branch -->
-            <path d="M100,12 C110,4 122,6 120,16 C118,24 106,26 100,20"
-                  stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.5"/>
-            <!-- Spiral on upper branch -->
-            <path d="M120,16 C128,8 138,10 136,20 C134,28 124,28 120,22"
-                  stroke="white" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.45"/>
+            <!-- Center: small magnolia + ornament -->
+            <g transform="translate(215,12)">
+              <path d="M0,0 C-4.32,-3.6 -6.48,-8.64 -2.88,-12.96 C0,-14.88 2.88,-12.96 6.48,-8.64 C4.32,-3.6 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(0)"/>
+              <path d="M0,0 C-4.32,-3.6 -6.48,-8.64 -2.88,-12.96 C0,-14.88 2.88,-12.96 6.48,-8.64 C4.32,-3.6 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(60)"/>
+              <path d="M0,0 C-4.32,-3.6 -6.48,-8.64 -2.88,-12.96 C0,-14.88 2.88,-12.96 6.48,-8.64 C4.32,-3.6 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(120)"/>
+              <path d="M0,0 C-4.32,-3.6 -6.48,-8.64 -2.88,-12.96 C0,-14.88 2.88,-12.96 6.48,-8.64 C4.32,-3.6 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(180)"/>
+              <path d="M0,0 C-4.32,-3.6 -6.48,-8.64 -2.88,-12.96 C0,-14.88 2.88,-12.96 6.48,-8.64 C4.32,-3.6 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(240)"/>
+              <path d="M0,0 C-4.32,-3.6 -6.48,-8.64 -2.88,-12.96 C0,-14.88 2.88,-12.96 6.48,-8.64 C4.32,-3.6 0,0" fill="url(#pg1)" opacity="0.9" transform="rotate(300)"/>
+              <circle r="4.32" fill="url(#cg1)"/>
+              <circle r="2.16" fill="#E8C820" opacity="0.9"/>
+            </g>
+            <path d="M190,34 C198,42 207,44 215,38 C223,44 232,42 240,34" stroke="#8B3AB8" stroke-width="1.3" fill="none" opacity="0.45" stroke-linecap="round"/>
 
-            <!-- Pointed leaf pairs (like the card) -->
-            <path d="M48,48 C38,36 24,36 26,48 C28,58 44,60 48,50 Z" fill="white" opacity="0.35"/>
-            <path d="M48,48 C56,36 70,38 68,50 C66,60 50,60 48,50 Z" fill="white" opacity="0.32"/>
+            <!-- Sparkles -->
+            <g transform="translate(152,18)"><line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><circle r="1.4" fill="#B870D8" opacity="0.8"/></g>
+            <g transform="translate(278,14)"><line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><circle r="1.4" fill="#B870D8" opacity="0.8"/></g>
+            <g transform="translate(162,32)"><line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><circle r="1.4" fill="#B870D8" opacity="0.8"/></g>
+            <g transform="translate(268,30)"><line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><circle r="1.4" fill="#B870D8" opacity="0.8"/></g>
+            <g transform="translate(198,8)"><line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><circle r="1.4" fill="#B870D8" opacity="0.8"/></g>
+            <g transform="translate(232,9)"><line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#8B3AB8" stroke-width="0.9" opacity="0.55"/><circle r="1.4" fill="#B870D8" opacity="0.8"/></g>
 
-            <path d="M100,12 C92,2 78,2 80,14 C82,24 98,24 100,14 Z" fill="white" opacity="0.3"/>
-            <path d="M100,12 C108,2 122,4 120,16 C118,26 102,24 100,14 Z" fill="white" opacity="0.28"/>
+            <!-- Side blossoms -->
+            <g transform="translate(138,26)">
+              <path d="M0,0 C-2.4,-1.8 -3.3,-4.5 -1.35,-6.6 C0,-7.5 1.35,-6.6 3.3,-4.5 C2.4,-1.8 0,0" fill="url(#bg1)" opacity="0.85" transform="rotate(0)"/>
+              <path d="M0,0 C-2.4,-1.8 -3.3,-4.5 -1.35,-6.6 C0,-7.5 1.35,-6.6 3.3,-4.5 C2.4,-1.8 0,0" fill="url(#bg1)" opacity="0.85" transform="rotate(72)"/>
+              <path d="M0,0 C-2.4,-1.8 -3.3,-4.5 -1.35,-6.6 C0,-7.5 1.35,-6.6 3.3,-4.5 C2.4,-1.8 0,0" fill="url(#bg1)" opacity="0.85" transform="rotate(144)"/>
+              <path d="M0,0 C-2.4,-1.8 -3.3,-4.5 -1.35,-6.6 C0,-7.5 1.35,-6.6 3.3,-4.5 C2.4,-1.8 0,0" fill="url(#bg1)" opacity="0.85" transform="rotate(216)"/>
+              <path d="M0,0 C-2.4,-1.8 -3.3,-4.5 -1.35,-6.6 C0,-7.5 1.35,-6.6 3.3,-4.5 C2.4,-1.8 0,0" fill="url(#bg1)" opacity="0.85" transform="rotate(288)"/>
+              <circle r="1.95" fill="#FFF8D0" opacity="0.95"/>
+            </g>
+            <g transform="translate(292,22)">
+              <path d="M0,0 C-2.08,-1.56 -2.86,-3.9 -1.17,-5.72 C0,-6.5 1.17,-5.72 2.86,-3.9 C2.08,-1.56 0,0" fill="url(#bg1)" opacity="0.85" transform="rotate(0)"/>
+              <path d="M0,0 C-2.08,-1.56 -2.86,-3.9 -1.17,-5.72 C0,-6.5 1.17,-5.72 2.86,-3.9 C2.08,-1.56 0,0" fill="url(#bg1)" opacity="0.85" transform="rotate(72)"/>
+              <path d="M0,0 C-2.08,-1.56 -2.86,-3.9 -1.17,-5.72 C0,-6.5 1.17,-5.72 2.86,-3.9 C2.08,-1.56 0,0" fill="url(#bg1)" opacity="0.85" transform="rotate(144)"/>
+              <path d="M0,0 C-2.08,-1.56 -2.86,-3.9 -1.17,-5.72 C0,-6.5 1.17,-5.72 2.86,-3.9 C2.08,-1.56 0,0" fill="url(#bg1)" opacity="0.85" transform="rotate(216)"/>
+              <path d="M0,0 C-2.08,-1.56 -2.86,-3.9 -1.17,-5.72 C0,-6.5 1.17,-5.72 2.86,-3.9 C2.08,-1.56 0,0" fill="url(#bg1)" opacity="0.85" transform="rotate(288)"/>
+              <circle r="1.69" fill="#FFF8D0" opacity="0.95"/>
+            </g>
 
-            <path d="M6,64 C-2,54 -4,40 6,38 C16,36 22,50 14,60 C10,66 6,66 6,64 Z" fill="white" opacity="0.28"/>
+            <!-- Berries -->
+            <circle cx="148" cy="10" r="2.8" fill="#7B2D8B" opacity="0.75"/>
+            <circle cx="158" cy="5"  r="2.8" fill="#7B2D8B" opacity="0.75"/>
+            <circle cx="154" cy="16" r="2.8" fill="#7B2D8B" opacity="0.75"/>
+            <circle cx="272" cy="7"  r="2.8" fill="#6A2080" opacity="0.75"/>
+            <circle cx="283" cy="12" r="2.8" fill="#6A2080" opacity="0.75"/>
+            <circle cx="278" cy="4"  r="2.8" fill="#6A2080" opacity="0.75"/>
 
-            <!-- Small leaf cluster lower -->
-            <path d="M18,90 C10,82 8,70 16,70 C24,70 28,82 20,88 Z" fill="white" opacity="0.26"/>
-            <path d="M18,90 C26,82 28,70 20,70 C12,70 8,82 16,88 Z" fill="white" opacity="0.24"/>
-
-            <!-- Flower at wave edge (48,48) -->
-            <circle cx="48" cy="46" r="7" fill="white" opacity="0.32"/>
-            <path d="M48,38 C52,34 57,36 56,41 C55,45 49,45 48,46 C47,45 41,45 40,41 C39,36 44,34 48,38Z" fill="white" opacity="0.42"/>
-            <path d="M56,46 C60,42 64,46 62,51 C60,55 55,53 48,46 C54,49 59,51 56,46Z" fill="white" opacity="0.38"/>
-            <path d="M48,54 C44,58 39,56 40,51 C41,47 47,47 48,46 C49,47 55,47 56,51 C57,56 52,58 48,54Z" fill="white" opacity="0.42"/>
-            <path d="M40,46 C36,42 38,37 43,38 C47,39 47,44 48,46 C47,48 43,50 40,50 C36,49 37,50 40,46Z" fill="white" opacity="0.38"/>
-            <circle cx="48" cy="46" r="3.5" fill="white" opacity="0.65"/>
-
-            <!-- Small flower upper (100,12) -->
-            <circle cx="100" cy="10" r="5" fill="white" opacity="0.35"/>
-            <path d="M100,4 C103,1 107,3 106,7 C105,10 101,10 100,10 C99,10 95,10 94,7 C93,3 97,1 100,4Z" fill="white" opacity="0.45"/>
-            <path d="M106,10 C109,7 112,10 110,14 C108,17 104,15 100,10 C104,12 108,14 106,10Z" fill="white" opacity="0.4"/>
-            <path d="M100,16 C97,19 93,17 94,13 C95,10 99,10 100,10 C101,10 105,10 106,13 C107,17 103,19 100,16Z" fill="white" opacity="0.45"/>
-            <path d="M94,10 C91,7 92,3 96,4 C99,5 99,9 100,10 C99,12 96,13 93,12 C90,12 91,13 94,10Z" fill="white" opacity="0.4"/>
-            <circle cx="100" cy="10" r="2.5" fill="white" opacity="0.7"/>
-
-            <!-- Berry clusters -->
-            <circle cx="4"  cy="100" r="3"   fill="white" opacity="0.5"/>
-            <circle cx="12" cy="97"  r="2.5" fill="white" opacity="0.45"/>
-            <circle cx="2"  cy="93"  r="2"   fill="white" opacity="0.42"/>
-            <circle cx="140" cy="8"  r="2.5" fill="white" opacity="0.38"/>
-            <circle cx="150" cy="4"  r="2"   fill="white" opacity="0.35"/>
-            <circle cx="160" cy="8"  r="1.8" fill="white" opacity="0.32"/>
+            <rect width="430" height="210" fill="url(#lhFade)"/>
           </svg>
 
-          <!-- Right floral — mirror -->
-          <svg class="floral floral-right" viewBox="0 0 170 140" xmlns="http://www.w3.org/2000/svg">
-            <path d="M170,0 L0,0 C22,4 48,2 70,12 C92,22 104,40 122,48 C138,55 156,52 164,64 C170,72 170,85 170,95 Z"
-                  fill="white" opacity="0.22"/>
-            <path d="M170,0 C125,6 92,4 75,22 C58,40 66,62 82,72 C98,82 122,78 138,90 C152,100 160,118 170,128 Z"
-                  fill="white" opacity="0.11"/>
-
-            <path d="M164,64 C166,80 168,96 162,108 C156,120 144,124 140,114"
-                  stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.65"/>
-            <path d="M140,114 C134,104 124,102 120,110 C116,118 122,128 130,126 C138,124 142,114 136,108 C130,102 120,102 116,110 C112,118 118,130 128,130"
-                  stroke="white" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
-
-            <path d="M122,48 C108,38 92,40 94,52 C96,62 110,64 118,58"
-                  stroke="white" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.55"/>
-            <path d="M94,52 C86,42 76,44 78,54 C80,62 90,62 94,56 C98,50 94,42 86,42"
-                  stroke="white" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.5"/>
-
-            <path d="M70,12 C60,4 48,6 50,16 C52,24 64,26 70,20"
-                  stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.5"/>
-            <path d="M50,16 C42,8 32,10 34,20 C36,28 46,28 50,22"
-                  stroke="white" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.45"/>
-
-            <path d="M122,48 C132,36 146,36 144,48 C142,58 126,60 122,50 Z" fill="white" opacity="0.35"/>
-            <path d="M122,48 C114,36 100,38 102,50 C104,60 120,60 122,50 Z" fill="white" opacity="0.32"/>
-
-            <path d="M70,12 C78,2 92,2 90,14 C88,24 72,24 70,14 Z" fill="white" opacity="0.3"/>
-            <path d="M70,12 C62,2 48,4 50,16 C52,26 68,24 70,14 Z" fill="white" opacity="0.28"/>
-
-            <path d="M164,64 C172,54 174,40 164,38 C154,36 148,50 156,60 C160,66 164,66 164,64 Z" fill="white" opacity="0.28"/>
-
-            <path d="M152,90 C160,82 162,70 154,70 C146,70 142,82 150,88 Z" fill="white" opacity="0.26"/>
-            <path d="M152,90 C144,82 142,70 150,70 C158,70 162,82 154,88 Z" fill="white" opacity="0.24"/>
-
-            <!-- Flower -->
-            <circle cx="122" cy="46" r="7" fill="white" opacity="0.32"/>
-            <path d="M122,38 C118,34 113,36 114,41 C115,45 121,45 122,46 C123,45 129,45 130,41 C131,36 126,34 122,38Z" fill="white" opacity="0.42"/>
-            <path d="M114,46 C110,42 106,46 108,51 C110,55 115,53 122,46 C116,49 111,51 114,46Z" fill="white" opacity="0.38"/>
-            <path d="M122,54 C126,58 131,56 130,51 C129,47 123,47 122,46 C121,47 115,47 114,51 C113,56 118,58 122,54Z" fill="white" opacity="0.42"/>
-            <path d="M130,46 C134,42 132,37 127,38 C123,39 123,44 122,46 C123,48 127,50 130,50 C134,49 133,50 130,46Z" fill="white" opacity="0.38"/>
-            <circle cx="122" cy="46" r="3.5" fill="white" opacity="0.65"/>
-
-            <!-- Small flower -->
-            <circle cx="70" cy="10" r="5" fill="white" opacity="0.35"/>
-            <path d="M70,4 C67,1 63,3 64,7 C65,10 69,10 70,10 C71,10 75,10 76,7 C77,3 73,1 70,4Z" fill="white" opacity="0.45"/>
-            <path d="M64,10 C61,7 58,10 60,14 C62,17 66,15 70,10 C66,12 62,14 64,10Z" fill="white" opacity="0.4"/>
-            <path d="M70,16 C73,19 77,17 76,13 C75,10 71,10 70,10 C69,10 65,10 64,13 C63,17 67,19 70,16Z" fill="white" opacity="0.45"/>
-            <path d="M76,10 C79,7 78,3 74,4 C71,5 71,9 70,10 C71,12 74,13 77,12 C80,12 79,13 76,10Z" fill="white" opacity="0.4"/>
-            <circle cx="70" cy="10" r="2.5" fill="white" opacity="0.7"/>
-
-            <circle cx="166" cy="100" r="3"   fill="white" opacity="0.5"/>
-            <circle cx="158" cy="97"  r="2.5" fill="white" opacity="0.45"/>
-            <circle cx="168" cy="93"  r="2"   fill="white" opacity="0.42"/>
-            <circle cx="30"  cy="8"   r="2.5" fill="white" opacity="0.38"/>
-            <circle cx="20"  cy="4"   r="2"   fill="white" opacity="0.35"/>
-            <circle cx="10"  cy="8"   r="1.8" fill="white" opacity="0.32"/>
-          </svg>
-
-          <!-- Top center — circular scroll ornament -->
-          <svg class="floral-center-top" viewBox="0 0 100 38" xmlns="http://www.w3.org/2000/svg">
-            <!-- Left scroll -->
-            <path d="M50,36 C50,28 42,20 34,24 C26,28 24,38 30,42 C36,46 44,40 42,34 C40,28 32,26 28,30"
-                  stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.6"/>
-            <!-- Right scroll -->
-            <path d="M50,36 C50,28 58,20 66,24 C74,28 76,38 70,42 C64,46 56,40 58,34 C60,28 68,26 72,30"
-                  stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.6"/>
-            <!-- Stem up -->
-            <path d="M50,36 L50,18" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity="0.6"/>
-            <!-- Central flower -->
-            <circle cx="50" cy="12" r="6" fill="white" opacity="0.35"/>
-            <path d="M50,5 C53,2 57,4 56,8 C55,11 51,11 50,12 C49,11 45,11 44,8 C43,4 47,2 50,5Z" fill="white" opacity="0.5"/>
-            <path d="M57,12 C60,9 63,12 61,16 C59,19 55,17 50,12 C55,14 59,16 57,12Z" fill="white" opacity="0.45"/>
-            <path d="M50,19 C47,22 43,20 44,16 C45,13 49,13 50,12 C51,13 55,13 56,16 C57,20 53,22 50,19Z" fill="white" opacity="0.5"/>
-            <path d="M43,12 C40,9 41,5 45,6 C48,7 49,10 50,12 C49,14 46,15 43,15 C40,14 41,15 43,12Z" fill="white" opacity="0.45"/>
-            <circle cx="50" cy="12" r="3" fill="white" opacity="0.75"/>
-            <!-- Side leaves -->
-            <path d="M34,24 C28,18 24,10 30,8 C36,6 40,16 36,22 Z" fill="white" opacity="0.3"/>
-            <path d="M66,24 C72,18 76,10 70,8 C64,6 60,16 64,22 Z" fill="white" opacity="0.3"/>
-            <circle cx="28" cy="30" r="2" fill="white" opacity="0.45"/>
-            <circle cx="72" cy="30" r="2" fill="white" opacity="0.45"/>
-          </svg>
-
-          <!-- Brand name -->
+          <!-- Brand -->
           <div class="brand-wrapper">
             <span class="brand-script">Valdete</span>
             <span class="brand-sub">MODAS</span>
           </div>
         </div>
 
-        <!-- Tagline -->
+        <!-- Body -->
         <p class="brand-tagline">Moda feminina, masculina, infantil e acessórios</p>
+        <div class="header-divider"></div>
 
-        <div class="divider"></div>
-
-        <!-- Form -->
-        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate style="padding: 0 32px;">
           <div class="form-group">
             <label class="form-label" for="email">E-mail</label>
-            <input
-              id="email" type="email" class="form-control"
-              [class.error]="showError('email')"
-              formControlName="email" placeholder="seu@email.com" autocomplete="email"
-            />
+            <input id="email" type="email" class="form-control" [class.error]="showError('email')"
+              formControlName="email" placeholder="seu@email.com" autocomplete="email"/>
             @if (showError('email')) {
               <span class="form-error">E-mail inválido</span>
             }
           </div>
 
-          <div class="form-group" style="margin-top:16px;">
+          <div class="form-group" style="margin-top: 14px;">
             <label class="form-label" for="password">Senha</label>
             <div class="password-wrapper">
-              <input
-                id="password" [type]="showPwd() ? 'text' : 'password'"
+              <input id="password" [type]="showPwd() ? 'text' : 'password'"
                 class="form-control" [class.error]="showError('password')"
-                formControlName="password" placeholder="••••••••" autocomplete="current-password"
-              />
+                formControlName="password" placeholder="••••••••" autocomplete="current-password"/>
               <button type="button" class="pwd-toggle" (click)="showPwd.set(!showPwd())"
                 [attr.aria-label]="showPwd() ? 'Ocultar senha' : 'Mostrar senha'">
                 @if (showPwd()) {
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
                 } @else {
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                 }
               </button>
             </div>
@@ -215,8 +273,7 @@ import { ToastService } from '../../../../core/services/toast.service';
             }
           </div>
 
-          <button type="submit" class="btn btn-primary btn-lg"
-            style="width:100%;margin-top:28px;" [disabled]="loading()">
+          <button type="submit" class="btn-submit" [disabled]="loading()">
             @if (loading()) {
               <span class="btn-spinner"></span> Entrando...
             } @else {
@@ -238,29 +295,23 @@ import { ToastService } from '../../../../core/services/toast.service';
       padding: 40px 20px;
       position: relative; overflow-x: hidden; overflow-y: auto;
       background:
-        radial-gradient(ellipse 80% 60% at 15% 10%, rgba(184,124,196,0.24) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 85% 90%, rgba(123,45,139,0.18) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 40% at 90% 10%, rgba(232,200,240,0.32) 0%, transparent 50%),
-        #f5eef8;
+        radial-gradient(ellipse 80% 60% at 15% 10%, rgba(184,80,220,0.20) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 85% 90%, rgba(110,36,128,0.18) 0%, transparent 55%),
+        #f2e8fa;
     }
 
     .bg-blob {
-      position: absolute; border-radius: 50%; pointer-events: none; filter: blur(45px);
+      position: absolute; border-radius: 50%; pointer-events: none; filter: blur(52px);
     }
     .bg-blob-1 {
-      width: 340px; height: 340px; top: -80px; left: -80px;
-      background: radial-gradient(circle, rgba(123,45,139,0.20) 0%, transparent 70%);
+      width: 420px; height: 420px; top: -120px; left: -120px;
+      background: radial-gradient(circle, rgba(110,36,128,0.14) 0%, transparent 70%);
       animation: blobFloat 8s ease-in-out infinite;
     }
     .bg-blob-2 {
-      width: 260px; height: 260px; bottom: -60px; right: -60px;
-      background: radial-gradient(circle, rgba(184,124,196,0.25) 0%, transparent 70%);
-      animation: blobFloat 10s ease-in-out infinite reverse;
-    }
-    .bg-blob-3 {
-      width: 200px; height: 200px; top: 40%; left: 5%;
-      background: radial-gradient(circle, rgba(232,200,240,0.35) 0%, transparent 70%);
-      animation: blobFloat 13s ease-in-out infinite 2s;
+      width: 320px; height: 320px; bottom: -90px; right: -90px;
+      background: radial-gradient(circle, rgba(184,124,196,0.20) 0%, transparent 70%);
+      animation: blobFloat 11s ease-in-out infinite reverse;
     }
     @keyframes blobFloat {
       0%,100% { transform: translate(0,0) scale(1); }
@@ -268,65 +319,67 @@ import { ToastService } from '../../../../core/services/toast.service';
       66%      { transform: translate(-10px,10px) scale(0.97); }
     }
 
+    /* Falling petals */
+    .petal-wrap {
+      position: absolute; top: -20px; pointer-events: none;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 0.9; }
+      100% { transform: translateY(110vh) rotate(540deg); opacity: 0; }
+    }
+
     /* Card */
     .login-card {
       background: #fff;
-      border-radius: 24px;
-      box-shadow: 0 4px 6px rgba(123,45,139,0.07), 0 14px 48px rgba(123,45,139,0.16), 0 0 0 1px rgba(123,45,139,0.08);
-      width: 100%; max-width: 430px;
+      border-radius: 28px;
+      box-shadow: 0 2px 8px rgba(110,36,128,0.06), 0 12px 44px rgba(110,36,128,0.13), 0 0 0 1px rgba(110,36,128,0.06);
+      width: 100%; max-width: 420px;
       position: relative; z-index: 1; overflow: hidden;
     }
 
-    /* Light botanical header */
+    /* Header */
     .card-header {
-      background: linear-gradient(180deg, #fff 0%, #fdf6ff 55%, #f3e5f8 100%);
-      padding: 36px 32px 28px;
-      position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-      min-height: 140px;
-      border-bottom: 1px solid #ead5f0;
+      position: relative; height: 210px; overflow: hidden;
+      border-bottom: 1px solid #e2ccf5;
     }
-
-    /* Floral SVGs */
-    .floral { position: absolute; top: 0; pointer-events: none; }
-    .floral-left  { left: 0;  width: 155px; height: 125px; }
-    .floral-right { right: 0; width: 155px; height: 125px; }
-
-    .floral-center-top {
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 80px; height: 32px; pointer-events: none;
+    .login-floral {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block;
     }
 
     /* Brand */
     .brand-wrapper {
-      display: flex; flex-direction: column; align-items: center;
-      position: relative; z-index: 1;
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; z-index: 2; padding-top: 20px;
     }
     .brand-script {
       font-family: var(--font-script);
-      font-size: 4rem; line-height: 1.1;
-      background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 50%, var(--color-primary-light) 100%);
+      font-size: 3.7rem; line-height: 1.25;
+      background: linear-gradient(140deg, #4A1858 0%, #7E2E9A 50%, #B870C8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      display: block;
-      filter: drop-shadow(0 1px 3px rgba(123,45,139,0.18));
+      display: block; text-align: center;
+      width: 100%; padding-left: 24px; padding-right: 24px;
     }
     .brand-sub {
       font-family: var(--font-display);
-      font-size: 0.72rem; color: var(--color-text-muted);
-      letter-spacing: 0.48em; text-transform: uppercase;
-      margin-top: 0; display: block;
+      font-size: 0.64rem; color: #7B4090;
+      letter-spacing: 0.56em; text-transform: uppercase;
+      margin-top: 2px; opacity: 0.8;
     }
 
     /* Body */
     .brand-tagline {
-      font-size: 0.78rem; color: var(--color-text-muted);
-      text-align: center; padding: 14px 32px 0;
-      font-style: italic; margin: 0;
+      font-family: var(--font-display);
+      font-style: italic; font-size: 0.8rem; color: #7A5090;
+      text-align: center; padding: 20px 32px 0; margin: 0;
     }
-    .divider { margin: 14px 32px 20px; }
-    form { padding: 0 32px; }
+    .header-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #D0B8E8, transparent);
+      margin: 14px 32px 18px;
+    }
 
     .password-wrapper { position: relative; }
     .pwd-toggle {
@@ -337,6 +390,18 @@ import { ToastService } from '../../../../core/services/toast.service';
     .pwd-toggle:hover { color: var(--color-primary); }
     .password-wrapper .form-control { padding-right: 44px; }
 
+    .btn-submit {
+      width: 100%; margin-top: 22px; padding: 13px 24px;
+      background: linear-gradient(135deg, #5A1868 0%, #9244C0 100%);
+      color: #fff; border: none; border-radius: 10px;
+      font-family: var(--font-body); font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px;
+      box-shadow: 0 4px 18px rgba(90,24,104,0.35);
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-1px); opacity: 0.93; }
+    .btn-submit:disabled { opacity: 0.72; cursor: not-allowed; }
+
     .btn-spinner {
       width: 16px; height: 16px;
       border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff;
@@ -344,16 +409,15 @@ import { ToastService } from '../../../../core/services/toast.service';
     }
 
     .login-hint {
-      margin: 20px 32px 28px; font-size: 0.78rem; color: var(--color-text-muted);
-      text-align: center; padding: 10px;
-      background: var(--color-accent-light); border-radius: var(--radius-sm);
+      margin: 18px 32px 26px; font-size: 0.75rem; color: #7A5090;
+      text-align: center; padding: 9px 14px;
+      background: #F7EEFE; border-radius: 9px; border: 1px solid #E5D2F5;
     }
 
     @media (max-width: 480px) {
-      .brand-script { font-size: 3.3rem; }
-      .card-header  { padding: 28px 16px 22px; min-height: 120px; }
-      .floral-left, .floral-right { width: 120px; height: 100px; }
-      form, .divider, .login-hint { padding-left: 20px; padding-right: 20px; }
+      .brand-script { font-size: 3rem; }
+      .card-header  { height: 180px; }
+      form, .header-divider, .login-hint, .brand-tagline { padding-left: 20px; padding-right: 20px; }
       .login-hint { margin-left: 20px; margin-right: 20px; }
     }
   `],
@@ -367,6 +431,16 @@ export class LoginPageComponent {
   loading   = signal(false);
   showPwd   = signal(false);
   submitted = signal(false);
+
+  readonly petals = Array.from({ length: 16 }, (_, i) => ({
+    id: i,
+    left: 6 + Math.random() * 88,
+    delay: Math.random() * 10,
+    dur: 7 + Math.random() * 9,
+    size: 7 + Math.random() * 13,
+    rot: Math.random() * 360,
+    color: ['#E880BC','#D068A8','#C058A0','#F0B0D8','#B84890','#F8D0EC','#9B4DB3'][i % 7],
+  }));
 
   form = this.fb.group({
     email:    ['', [Validators.required, Validators.email]],

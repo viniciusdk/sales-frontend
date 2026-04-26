@@ -164,11 +164,13 @@
 .btn-ghost {
   background: transparent;
   color: var(--color-text-muted);
+  border: 1.5px solid var(--color-border);
 }
 
 .btn-ghost:hover:not(:disabled) {
   background: var(--color-accent-light);
   color: var(--color-primary);
+  border-color: var(--color-primary-light);
 }
 
 .btn-danger {
@@ -189,6 +191,7 @@
 .btn-icon {
   padding: 8px;
   border-radius: 50%;
+  border: none !important;
 }
 
 /* ── Form controls ── */

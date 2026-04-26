@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SalesFacade } from '../../facades/sales.facade';
 import { PAYMENT_LABELS } from '../../../../shared/models/sale.model';
@@ -65,15 +65,85 @@ import { PAYMENT_LABELS } from '../../../../shared/models/sale.model';
           </div>
         }
       </div>
+
+      @if (facade.sales().length > 0) {
+        <div class="summary-row animate-in animate-in-delay-2">
+          <div class="summary-card">
+            <div class="summary-icon summary-icon-purple">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            </div>
+            <div>
+              <div class="summary-label">Total</div>
+              <div class="summary-value">{{ formatCurrency(totalRevenue()) }}</div>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon summary-icon-blue">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16l3-1.5L9 20l2-1.5L13 20l2-1.5L17 20l2-1.5V8z"/><path d="M10 9h4M10 13h4M10 17h2"/></svg>
+            </div>
+            <div>
+              <div class="summary-label">Nº de Vendas</div>
+              <div class="summary-value">{{ facade.sales().length }}</div>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon summary-icon-green">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div>
+              <div class="summary-label">Ticket Médio</div>
+              <div class="summary-value">{{ formatCurrency(avgTicket()) }}</div>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   `,
   styles: [`
     .date-cell { font-size: 0.82rem; color: var(--color-text-muted); white-space: nowrap; }
     .price { color: var(--color-primary-dark); }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .summary-card {
+      background: var(--color-bg-card);
+      border-radius: 14px;
+      border: 1px solid #EAD8F8;
+      padding: 16px 20px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .summary-icon {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .summary-icon-purple { background: #F3E8FF; color: #7B2D8B; }
+    .summary-icon-blue   { background: #E8F0FF; color: #2856A8; }
+    .summary-icon-green  { background: #E8F5E9; color: #2E7D32; }
+    .summary-label {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--color-text-muted); margin-bottom: 3px;
+    }
+    .summary-value {
+      font-family: var(--font-display); font-size: 1.3rem; font-weight: 700;
+      color: var(--color-primary-dark);
+    }
+    @media (max-width: 768px) {
+      .summary-row { grid-template-columns: 1fr; }
+    }
   `],
 })
 export class SalesListPageComponent implements OnInit {
   protected readonly facade = inject(SalesFacade);
+
+  totalRevenue = computed(() => this.facade.sales().reduce((sum, s) => sum + s.total, 0));
+  avgTicket    = computed(() => {
+    const count = this.facade.sales().length;
+    return count > 0 ? this.totalRevenue() / count : 0;
+  });
 
   ngOnInit(): void { this.facade.loadAll(); }
 

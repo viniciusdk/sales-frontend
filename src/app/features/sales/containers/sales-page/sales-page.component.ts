@@ -46,7 +46,13 @@ interface CartItem {
 
             <div class="product-grid">
               @for (p of filteredProducts(); track p.id) {
-                <div class="product-card-btn" [class.out-of-stock]="p.stock === 0" (click)="addToCart(p)">
+                <div class="product-card-btn"
+                  [class.out-of-stock]="p.stock === 0"
+                  [class.in-cart]="cartQty(p.id) > 0"
+                  (click)="addToCart(p)">
+                  @if (cartQty(p.id) > 0) {
+                    <div class="card-qty-badge">{{ cartQty(p.id) }}</div>
+                  }
                   <div class="product-card-category">{{ p.category }}</div>
                   <div class="product-card-name">{{ p.name }}</div>
                   <div class="product-card-code">{{ p.code }}</div>
@@ -194,15 +200,29 @@ interface CartItem {
       border-radius: var(--radius-sm);
       padding: 12px;
       cursor: pointer;
-      transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s, background 0.15s;
       background: var(--color-bg-card);
+      position: relative;
     }
     .product-card-btn:hover:not(.out-of-stock) {
       border-color: var(--color-primary-light);
       box-shadow: var(--shadow-sm);
       transform: translateY(-1px);
     }
+    .product-card-btn.in-cart {
+      border-color: #9B4DB3;
+      background: #FBF0FE;
+    }
     .product-card-btn.out-of-stock { opacity: 0.45; cursor: not-allowed; }
+
+    .card-qty-badge {
+      position: absolute; top: 7px; right: 7px;
+      width: 17px; height: 17px; border-radius: 50%;
+      background: #7B2D8B; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.58rem; font-weight: 800;
+      line-height: 1; pointer-events: none;
+    }
 
     .product-card-category {
       font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
@@ -363,6 +383,10 @@ export class SalesPageComponent implements OnInit {
       },
       () => this.router.navigate(['/sales'])
     );
+  }
+
+  cartQty(productId: string): number {
+    return this.cart().find(i => i.product.id === productId)?.quantity ?? 0;
   }
 
   formatCurrency(v: number): string {
