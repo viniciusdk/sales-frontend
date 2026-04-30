@@ -17,10 +17,6 @@ type ImportPhase = 'idle' | 'preview' | 'importing' | 'done';
           <h1 class="page-title">Importar Produtos</h1>
           <p class="page-subtitle">Importe produtos em massa a partir de um arquivo CSV</p>
         </div>
-        <a routerLink="/products" class="btn btn-ghost">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-          Voltar
-        </a>
       </div>
 
       @if (phase() === 'done') {

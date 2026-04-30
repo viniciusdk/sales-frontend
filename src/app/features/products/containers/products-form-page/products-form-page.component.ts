@@ -15,10 +15,6 @@ import { CATEGORY_LABELS } from '../../../../shared/models/product.model';
           <h1 class="page-title">{{ isEdit() ? 'Editar Produto' : 'Cadastrar Produto' }}</h1>
           <p class="page-subtitle">{{ isEdit() ? 'Atualize as informações do produto' : 'Preencha as informações do novo produto' }}</p>
         </div>
-        <a routerLink="/products" class="btn btn-ghost">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
-          Voltar
-        </a>
       </div>
 
       @if (saved()) {

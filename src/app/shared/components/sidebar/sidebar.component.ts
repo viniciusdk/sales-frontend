@@ -70,6 +70,7 @@ interface NavGroup { label?: string; items: NavItem[]; }
             <a
               [routerLink]="item.route"
               routerLinkActive="active"
+              [routerLinkActiveOptions]="{exact: true}"
               class="nav-item"
               (click)="open.set(false)"
             >

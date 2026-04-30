@@ -15,10 +15,6 @@ import { PAYMENT_LABELS } from '../../../../shared/models/sale.model';
           <h1 class="page-title">Olá, {{ firstName() }} 👋</h1>
           <p class="page-subtitle" style="text-transform: capitalize;">{{ today() }} · Bem-vinda à Valdete Modas</p>
         </div>
-        <a routerLink="/sales/new" class="btn btn-primary btn-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-          Nova Venda
-        </a>
       </div>
 
       @if (facade.stats(); as s) {
@@ -164,7 +160,8 @@ import { PAYMENT_LABELS } from '../../../../shared/models/sale.model';
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      gap: 32px;
+      margin-top: 10px;
       margin-bottom: 22px;
     }
 
@@ -206,9 +203,10 @@ import { PAYMENT_LABELS } from '../../../../shared/models/sale.model';
       text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;
     }
     .stat-value {
-      font-family: var(--font-display);
+      font-family: 'Inter', sans-serif;
       font-size: 1.5rem; font-weight: 700;
       color: var(--color-text); line-height: 1.15;
+      letter-spacing: -0.02em;
     }
 
     .dashboard-bottom { display: flex; gap: 18px; margin-bottom: 22px; }
