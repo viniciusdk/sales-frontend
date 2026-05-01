@@ -1,0 +1,147 @@
+<div class="animate-in">
+  <!-- Header -->
+  <div class="dashboard-header animate-in">
+    <div>
+      <h1 class="page-title">Olá, {{ firstName() }} 👋</h1>
+      <p class="page-subtitle" style="text-transform: capitalize;">{{ today() }} · Bem-vinda à Valdete Modas</p>
+    </div>
+  </div>
+
+  @if (facade.stats(); as s) {
+    <!-- Stat cards -->
+    <div class="stats-grid animate-in animate-in-delay-1">
+      <div class="stat-card">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #7B2D8B, rgba(123,45,139,0.33));"></div>
+        <div class="stat-top-row">
+          <div class="stat-icon stat-icon-purple">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#7B2D8B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <span class="stat-delta delta-purple">↑ +12%</span>
+        </div>
+        <div class="stat-label">Faturamento Hoje</div>
+        <div class="stat-value">{{ formatCurrency(s.totalRevenueToday) }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #1565C0, rgba(21,101,192,0.33));"></div>
+        <div class="stat-top-row">
+          <div class="stat-icon stat-icon-blue">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#1565C0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          </div>
+          <span class="stat-delta delta-blue">↑ +3</span>
+        </div>
+        <div class="stat-label">Vendas Hoje</div>
+        <div class="stat-value">{{ s.totalSalesToday }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #2E7D32, rgba(46,125,50,0.33));"></div>
+        <div class="stat-top-row">
+          <div class="stat-icon stat-icon-green">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#2E7D32" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          </div>
+          <span class="stat-delta delta-green">↑ +8%</span>
+        </div>
+        <div class="stat-label">Faturamento Mês</div>
+        <div class="stat-value">{{ formatCurrency(s.totalRevenueMonth) }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #B45309, rgba(180,83,9,0.33));"></div>
+        <div class="stat-top-row">
+          <div class="stat-icon stat-icon-orange">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#B45309" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </div>
+          <span class="stat-delta delta-orange">↑ +22</span>
+        </div>
+        <div class="stat-label">Vendas no Mês</div>
+        <div class="stat-value">{{ s.totalSalesMonth }}</div>
+      </div>
+    </div>
+
+    <!-- Bottom row -->
+    <div class="dashboard-bottom animate-in animate-in-delay-2">
+      <!-- Recent sales -->
+      <div class="card" style="padding: 24px; flex: 1;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+          <h3 class="section-title">Últimas Vendas</h3>
+          <a routerLink="/sales" class="btn btn-ghost btn-sm">Ver todas →</a>
+        </div>
+
+        @if (s.recentSales.length === 0) {
+          <div class="empty-state" style="padding: 20px;">
+            <p style="font-size: 0.875rem;">Nenhuma venda ainda</p>
+          </div>
+        } @else {
+          <div class="recent-sales-list">
+            @for (sale of s.recentSales; track sale.id) {
+              <div class="recent-sale-item">
+                <div class="sale-avatar">
+                  {{ sale.customerName ? sale.customerName.charAt(0).toUpperCase() : 'C' }}
+                </div>
+                <div class="sale-info">
+                  <span class="sale-customer">{{ sale.customerName || 'Cliente' }}</span>
+                  <span class="sale-meta">{{ formatDate(sale.createdAt) }} · {{ paymentLabel(sale.paymentMethod) }}</span>
+                </div>
+                <strong class="sale-total">{{ formatCurrency(sale.total) }}</strong>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Top products -->
+      <div class="card" style="padding: 24px; width: 290px; flex-shrink: 0;">
+        <h3 class="section-title" style="margin-bottom: 18px;">Mais Vendidos</h3>
+
+        @if (s.topProducts.length === 0) {
+          <p class="text-muted" style="font-size: 0.875rem;">Sem dados ainda</p>
+        } @else {
+          <div class="top-products-list">
+            @for (p of s.topProducts; track p.name; let i = $index) {
+              <div style="margin-bottom: 13px;">
+                <div class="top-product-item">
+                  <span class="rank-badge" [class]="rankClass(i)">{{ i + 1 }}</span>
+                  <span class="top-product-name">{{ p.name }}</span>
+                  <span class="top-product-qty">{{ p.quantity }}</span>
+                </div>
+                <div class="top-product-bar">
+                  <div class="top-product-bar-fill" [style.width.%]="barWidth(p.quantity, s.topProducts[0].quantity)"></div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Quick links -->
+    <div class="quick-links animate-in animate-in-delay-3">
+      <a routerLink="/products/new" class="quick-link-card">
+        <div class="quick-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        </div>
+        <span>Cadastrar Produto</span>
+      </a>
+      <a routerLink="/products/import" class="quick-link-card">
+        <div class="quick-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <span>Importar Produtos</span>
+      </a>
+      <a routerLink="/users" class="quick-link-card">
+        <div class="quick-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <span>Gerenciar Usuários</span>
+      </a>
+    </div>
+  } @else {
+    <!-- Skeleton -->
+    <div class="stats-grid">
+      @for (_ of [1,2,3,4]; track _) {
+        <div class="stat-card skeleton-card"></div>
+      }
+    </div>
+  }
+</div>

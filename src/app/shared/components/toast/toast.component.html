@@ -1,0 +1,16 @@
+<div class="toast-container">
+  @for (toast of toastService.toasts(); track toast.id) {
+    <div class="toast {{ toast.type }}" role="alert">
+      <span class="toast-icon">
+        @switch (toast.type) {
+          @case ('success') { ✓ }
+          @case ('error')   { ✕ }
+          @case ('warning') { ⚠ }
+          @default          { ℹ }
+        }
+      </span>
+      <span>{{ toast.message }}</span>
+      <button class="toast-close" (click)="toastService.remove(toast.id)" aria-label="Fechar">×</button>
+    </div>
+  }
+</div>

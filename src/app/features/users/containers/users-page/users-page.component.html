@@ -1,0 +1,147 @@
+<div class="animate-in">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Usuários</h1>
+      <p class="page-subtitle">{{ facade.users().length }} usuário(s) cadastrado(s)</p>
+    </div>
+    <button class="btn btn-primary" (click)="openCreate()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+      Novo Usuário
+    </button>
+  </div>
+
+  <div class="card animate-in animate-in-delay-1">
+    @if (facade.users().length === 0) {
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        <p>Nenhum usuário cadastrado</p>
+        <button class="btn btn-outline btn-sm" (click)="openCreate()">Criar usuário</button>
+      </div>
+    } @else {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Perfil</th>
+              <th>Status</th>
+              <th>Criado em</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (u of facade.users(); track u.id) {
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar-sm">{{ u.name.charAt(0).toUpperCase() }}</div>
+                    <strong>{{ u.name }}</strong>
+                  </div>
+                </td>
+                <td class="text-muted">{{ u.email }}</td>
+                <td>
+                  <span class="badge" [class]="u.role === 'admin' ? 'badge-purple' : 'badge-blue'">
+                    {{ u.role === 'admin' ? 'Admin' : 'Vendedor' }}
+                  </span>
+                </td>
+                <td>
+                  <button class="toggle-btn" [class.active]="u.active" (click)="facade.toggleActive(u.id)" [title]="u.active ? 'Desativar' : 'Ativar'">
+                    <span class="toggle-knob"></span>
+                  </button>
+                </td>
+                <td class="text-muted date-cell">{{ formatDate(u.createdAt) }}</td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn btn-ghost btn-sm btn-icon" (click)="openEdit(u)" title="Editar">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    </button>
+                    <button class="btn btn-ghost btn-sm btn-icon btn-danger" (click)="confirmDelete(u)" title="Excluir">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Create / Edit modal -->
+@if (modalMode() !== null) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ modalMode() === 'create' ? 'Novo Usuário' : 'Editar Usuário' }}</h3>
+        <button class="modal-close" (click)="closeModal()">×</button>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="submitForm()" novalidate class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="uname">Nome <span class="req">*</span></label>
+          <input id="uname" type="text" class="form-control" [class.error]="showErr('name')" formControlName="name" placeholder="Nome completo"/>
+          @if (showErr('name')) { <span class="form-error">Campo obrigatório</span> }
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="uemail">E-mail <span class="req">*</span></label>
+          <input id="uemail" type="email" class="form-control" [class.error]="showErr('email')" formControlName="email" placeholder="email@exemplo.com"/>
+          @if (showErr('email')) { <span class="form-error">E-mail inválido</span> }
+        </div>
+        <div class="fg-2col">
+          <div class="form-group">
+            <label class="form-label" for="urole">Perfil <span class="req">*</span></label>
+            <select id="urole" class="form-control" formControlName="role">
+              <option value="seller">Vendedor</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <div style="display: flex; align-items: center; gap: 10px; padding-top: 6px;">
+              <button type="button" class="toggle-btn" [class.active]="form.get('active')?.value" (click)="toggleFormActive()">
+                <span class="toggle-knob"></span>
+              </button>
+              <span style="font-size: 0.82rem; color: var(--color-text-muted);">
+                {{ form.get('active')?.value ? 'Ativo' : 'Inativo' }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" (click)="closeModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="facade.submitting()">
+            @if (facade.submitting()) {
+              <span class="btn-spinner"></span> Salvando...
+            } @else {
+              {{ modalMode() === 'create' ? 'Criar Usuário' : 'Salvar' }}
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- Delete confirmation modal -->
+@if (deleteTarget()) {
+  <div class="modal-overlay" (click)="deleteTarget.set(null)">
+    <div class="modal-box modal-box-sm" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Confirmar exclusão</h3>
+        <button class="modal-close" (click)="deleteTarget.set(null)">×</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.9rem; color: var(--color-text-muted);">
+          Tem certeza que deseja remover <strong>{{ deleteTarget()!.name }}</strong>?
+          Esta ação não pode ser desfeita.
+        </p>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" (click)="deleteTarget.set(null)">Cancelar</button>
+          <button class="btn btn-danger" (click)="doDelete()">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

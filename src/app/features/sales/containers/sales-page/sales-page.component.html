@@ -1,0 +1,146 @@
+<div class="animate-in">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Nova Venda</h1>
+      <p class="page-subtitle">Adicione produtos e finalize a venda</p>
+    </div>
+  </div>
+
+  <div class="sale-layout">
+    <!-- Left: product selector -->
+    <div class="sale-products animate-in animate-in-delay-1">
+      <div class="card" style="padding: 24px;">
+        <h3 class="section-title">Adicionar Produto</h3>
+
+        <div class="product-search-box">
+          <input
+            type="search"
+            class="form-control"
+            placeholder="Buscar produto por nome ou código..."
+            [value]="productSearch()"
+            (input)="productSearch.set($any($event.target).value)"
+          />
+        </div>
+
+        <div class="product-grid">
+          @for (p of filteredProducts(); track p.id) {
+            <div class="product-card-btn"
+              [class.out-of-stock]="p.stock === 0"
+              [class.in-cart]="cartQty(p.id) > 0"
+              (click)="addToCart(p)">
+              @if (cartQty(p.id) > 0) {
+                <div class="card-qty-badge">{{ cartQty(p.id) }}</div>
+              }
+              <div class="product-card-category">{{ p.category }}</div>
+              <div class="product-card-name">{{ p.name }}</div>
+              <div class="product-card-code">{{ p.code }}</div>
+              <div class="product-card-footer">
+                <strong class="product-card-price">{{ formatCurrency(p.price) }}</strong>
+                <span class="product-card-stock" [class.low]="p.stock <= 5">{{ p.stock }} un.</span>
+              </div>
+            </div>
+          }
+          @if (filteredProducts().length === 0) {
+            <p class="text-muted" style="padding: 12px 0; font-size: 0.875rem;">Nenhum produto encontrado.</p>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: cart + checkout -->
+    <div class="sale-cart animate-in animate-in-delay-2">
+      <div class="card" style="padding: 24px;">
+        <h3 class="section-title">
+          Carrinho
+          @if (cart().length > 0) {
+            <span class="badge badge-purple" style="margin-left: 8px;">{{ cart().length }}</span>
+          }
+        </h3>
+
+        @if (cart().length === 0) {
+          <div class="empty-state" style="padding: 32px 20px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.4 5.4A1 1 0 007 20h10M10 20a1 1 0 102 0M17 20a1 1 0 102 0"/></svg>
+            <p style="font-size: 0.875rem;">Clique em um produto para adicionar</p>
+          </div>
+        } @else {
+          <div class="cart-items">
+            @for (item of cart(); track item.product.id) {
+              <div class="cart-item">
+                <div class="cart-item-info">
+                  <span class="cart-item-name">{{ item.product.name }}</span>
+                  <span class="cart-item-price">{{ formatCurrency(item.product.price) }} un.</span>
+                </div>
+                <div class="cart-item-controls">
+                  <button class="qty-btn" (click)="decreaseQty(item.product.id)" aria-label="Diminuir">−</button>
+                  <span class="qty-value">{{ item.quantity }}</span>
+                  <button class="qty-btn" (click)="increaseQty(item.product.id)" [disabled]="item.quantity >= item.product.stock" aria-label="Aumentar">+</button>
+                  <span class="cart-item-subtotal">{{ formatCurrency(item.subtotal) }}</span>
+                  <button class="btn btn-ghost btn-sm btn-icon" (click)="removeFromCart(item.product.id)" aria-label="Remover">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: var(--color-error)"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Checkout form -->
+          <form [formGroup]="form" (ngSubmit)="submit()" novalidate style="margin-top: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="customerName">Nome do cliente</label>
+              <input id="customerName" type="text" class="form-control" formControlName="customerName" placeholder="Nome do cliente" />
+            </div>
+
+            <div class="form-row" style="margin-top: 14px;">
+              <div class="form-group">
+                <label class="form-label" for="payment">Pagamento *</label>
+                <select id="payment" class="form-control" [class.error]="showError('paymentMethod')" formControlName="paymentMethod">
+                  <option value="">Selecione...</option>
+                  @for (entry of paymentEntries; track entry.key) {
+                    <option [value]="entry.key">{{ entry.label }}</option>
+                  }
+                </select>
+                @if (showError('paymentMethod')) { <span class="form-error">Selecione a forma de pagamento</span> }
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="discount">Desconto (R$)</label>
+                <input id="discount" type="number" class="form-control" formControlName="discount" placeholder="0" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <div class="total-box">
+              <div class="total-row">
+                <span>Subtotal</span>
+                <span>{{ formatCurrency(subtotal()) }}</span>
+              </div>
+              @if (discount() > 0) {
+                <div class="total-row discount-row">
+                  <span>Desconto</span>
+                  <span>− {{ formatCurrency(discount()) }}</span>
+                </div>
+              }
+              <div class="total-row total-final">
+                <span>Total</span>
+                <strong>{{ formatCurrency(totalFinal()) }}</strong>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              style="width: 100%; margin-top: 16px;"
+              [disabled]="salesFacade.submitting() || cart().length === 0"
+            >
+              @if (salesFacade.submitting()) {
+                <span class="btn-spinner"></span> Finalizando...
+              } @else {
+                Finalizar Venda
+              }
+            </button>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+</div>
