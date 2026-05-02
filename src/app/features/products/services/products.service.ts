@@ -14,6 +14,7 @@ export class ProductsService {
   }
 
   create(form: ProductForm): Observable<Product> {
+    console.log('Creating product with form:', form);
     return this.http.post<Product>(this.base, form);
   }
 
@@ -25,9 +26,7 @@ export class ProductsService {
     return this.http.delete<void>(`${this.base}/${id}`);
   }
 
-  importCsv(file: File): Observable<{ imported: number }> {
-    const fd = new FormData();
-    fd.append('file', file);
-    return this.http.post<{ imported: number }>(`${this.base}/import`, fd);
+  importProducts(products: ProductForm[]): Observable<{ success: number; errors: { row: number; message: string }[] }> {
+    return this.http.post<{ success: number; errors: { row: number; message: string }[] }>(`${this.base}/import/json`, products);
   }
 }

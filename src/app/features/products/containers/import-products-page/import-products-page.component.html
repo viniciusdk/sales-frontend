@@ -24,7 +24,7 @@
     <div class="import-layout">
       <!-- Left: upload + instructions -->
       <div class="section-card">
-        <div class="section-card-header">Arquivo CSV</div>
+        <div class="section-card-header">Arquivo CSV / XLSX</div>
         <div class="section-card-body">
 
           @if (phase() === 'idle' || phase() === 'preview') {
@@ -36,13 +36,13 @@
               (drop)="onDrop($event)"
               (click)="fileInput.click()"
             >
-              <input #fileInput type="file" accept=".csv" style="display:none" (change)="onFileChange($event)"/>
+              <input #fileInput type="file" accept=".csv,.xlsx" style="display:none" (change)="onFileChange($event)"/>
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" class="drop-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
               @if (fileName()) {
                 <p class="drop-title">{{ fileName() }}</p>
                 <p class="drop-sub">Clique para trocar o arquivo</p>
               } @else {
-                <p class="drop-title">Arraste o arquivo CSV aqui</p>
+                <p class="drop-title">Arraste o arquivo CSV ou XLSX aqui</p>
                 <p class="drop-sub">ou clique para selecionar</p>
               }
             </div>
@@ -65,7 +65,7 @@
             <div class="section-card-body">
               <div class="empty-preview">
                 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                <p>Selecione um CSV para visualizar</p>
+                <p>Selecione um CSV ou XLSX para visualizar</p>
               </div>
             </div>
           </div>
@@ -90,7 +90,7 @@
                       <th>Categoria</th>
                       <th>Preço</th>
                       <th>Estoque</th>
-                      <th></th>
+
                     </tr>
                   </thead>
                   <tbody>
@@ -102,11 +102,6 @@
                         <td>{{ row.category }}</td>
                         <td>R$ {{ row.price }}</td>
                         <td>{{ row.stock }}</td>
-                        <td>
-                          @if (hasRowError(row)) {
-                            <span class="row-err-icon" title="Linha com dados inválidos">!</span>
-                          }
-                        </td>
                       </tr>
                     }
                   </tbody>

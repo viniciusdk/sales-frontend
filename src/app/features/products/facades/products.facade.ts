@@ -73,16 +73,45 @@ export class ProductsFacade {
     });
   }
 
-  importCsv(file: File, onSuccess?: (count: number) => void): void {
+  importProducts(
+    products: ProductForm[],
+    onSuccess?: (count: number) => void,
+    onProgress?: (done: number, total: number) => void,
+  ): void {
+    const CHUNK_SIZE = 100;
+    const chunks: ProductForm[][] = [];
+    for (let i = 0; i < products.length; i += CHUNK_SIZE) {
+      chunks.push(products.slice(i, i + CHUNK_SIZE));
+    }
+
+    let imported = 0;
     this.loading.show();
-    this.svc.importCsv(file).subscribe({
-      next: res => {
-        this.toast.success(`${res.imported} produto(s) importado(s) com sucesso!`);
-        onSuccess?.(res.imported);
+
+    const sendChunk = (index: number): void => {
+      if (index >= chunks.length) {
+        this.toast.success(`${imported} produto(s) importado(s) com sucesso!`);
+        onSuccess?.(imported);
+        this.loading.hide();
         this.loadAll();
-      },
-      error:    () => this.toast.error('Erro ao importar produtos.'),
-      complete: () => this.loading.hide(),
-    });
+        return;
+      }
+
+      this.svc.importProducts(chunks[index]).subscribe({
+        next: res => {
+          imported += res.success;
+          if (res.errors?.length) {
+            res.errors.forEach(e => this.toast.error(`Linha ${e.row + (index * CHUNK_SIZE)}: ${e.message}`));
+          }
+          onProgress?.(imported, products.length);
+          sendChunk(index + 1);
+        },
+        error: () => {
+          this.toast.error('Erro ao importar produtos.');
+          this.loading.hide();
+        },
+      });
+    };
+
+    sendChunk(0);
   }
 }

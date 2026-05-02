@@ -1,10 +1,11 @@
-export type ProductCategory = 'feminino' | 'masculino' | 'infantil' | 'acessorios';
+export type ProductCategory = 'feminino' | 'masculino' | 'infantil' | 'acessorios' | 'diversos';
 
 export interface Product {
   id: string;
   name: string;
   description: string;
   price: number;
+  cost: number;
   stock: number;
   category: ProductCategory;
   code: string;
@@ -16,6 +17,7 @@ export interface ProductForm {
   name: string;
   description: string;
   price: number;
+  cost: number;
   stock: number;
   category: ProductCategory;
   code: string;
@@ -26,4 +28,5 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   masculino:  'Masculino',
   infantil:   'Infantil',
   acessorios: 'Acessórios',
+  diversos:    'Diversos',
 };
