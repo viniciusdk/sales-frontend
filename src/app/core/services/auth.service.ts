@@ -1,17 +1,11 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, delay, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { LoginRequest, LoginResponse, User } from '../../shared/models/user.model';
+import { environment } from '../../../environments/environment';
 
 const TOKEN_KEY = 'valdete_token';
 const USER_KEY  = 'valdete_user';
-
-const MOCK_USER: User = {
-  id: '1',
-  name: 'Administrador',
-  email: 'admin@valdetmodas.com.br',
-  role: 'admin',
-};
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -21,9 +15,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(req: LoginRequest): Observable<LoginResponse> {
-    const mock: LoginResponse = { user: MOCK_USER, token: 'mock-jwt-token-' + Date.now() };
-    return of(mock).pipe(
-      delay(800),
+    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, req).pipe(
       tap(res => {
         localStorage.setItem(TOKEN_KEY, res.token);
         localStorage.setItem(USER_KEY, JSON.stringify(res.user));

@@ -16,12 +16,14 @@ export class ImportProductsPageComponent {
   private productsFacade = inject(ProductsFacade);
   private toast = inject(ToastService);
 
-  phase        = signal<ImportPhase>('idle');
-  dragging     = signal(false);
-  fileName     = signal('');
-  rows         = signal<CsvRow[]>([]);
-  progress     = signal(0);
+  phase         = signal<ImportPhase>('idle');
+  dragging      = signal(false);
+  fileName      = signal('');
+  rows          = signal<CsvRow[]>([]);
+  progress      = signal(0);
   importedCount = signal(0);
+
+  private file = signal<File | null>(null);
 
   errorCount = computed(() => this.rows().filter(r => this.hasRowError(r)).length);
 
@@ -32,27 +34,28 @@ export class ImportProductsPageComponent {
   onDrop(event: DragEvent): void {
     event.preventDefault();
     this.dragging.set(false);
-    const file = event.dataTransfer?.files[0];
-    if (file) this.processFile(file);
+    const f = event.dataTransfer?.files[0];
+    if (f) this.processFile(f);
   }
 
   onFileChange(event: Event): void {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) this.processFile(file);
+    const f = (event.target as HTMLInputElement).files?.[0];
+    if (f) this.processFile(f);
   }
 
-  processFile(file: File): void {
-    if (!file.name.endsWith('.csv')) {
+  processFile(f: File): void {
+    if (!f.name.endsWith('.csv')) {
       this.toast.error('Selecione um arquivo .csv válido.');
       return;
     }
-    this.fileName.set(file.name);
+    this.file.set(f);
+    this.fileName.set(f.name);
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target?.result as string;
       this.parseCsv(text);
     };
-    reader.readAsText(file, 'utf-8');
+    reader.readAsText(f, 'utf-8');
   }
 
   parseCsv(text: string): void {
@@ -77,35 +80,15 @@ export class ImportProductsPageComponent {
   }
 
   startImport(): void {
+    const f = this.file();
+    if (!f) return;
     this.phase.set('importing');
-    this.progress.set(0);
-    this.importedCount.set(0);
-
-    const validRows = this.rows().filter(r => !this.hasRowError(r));
-    let idx = 0;
-
-    const tick = () => {
-      if (idx >= validRows.length) {
-        this.progress.set(100);
-        setTimeout(() => this.phase.set('done'), 400);
-        return;
-      }
-      const row = validRows[idx];
-      this.productsFacade.create({
-        name:        row.name,
-        code:        row.code.toUpperCase(),
-        category:    row.category as any,
-        price:       parseFloat(row.price),
-        stock:       parseInt(row.stock),
-        description: row.description,
-      });
-      idx++;
-      this.importedCount.set(idx);
-      this.progress.set(Math.round((idx / validRows.length) * 100));
-      setTimeout(tick, 120);
-    };
-
-    setTimeout(tick, 200);
+    this.progress.set(50);
+    this.productsFacade.importCsv(f, (count) => {
+      this.importedCount.set(count);
+      this.progress.set(100);
+      this.phase.set('done');
+    });
   }
 
   reset(): void {
@@ -114,5 +97,6 @@ export class ImportProductsPageComponent {
     this.fileName.set('');
     this.progress.set(0);
     this.importedCount.set(0);
+    this.file.set(null);
   }
 }

@@ -32,7 +32,7 @@ export class DashboardPageComponent implements OnInit {
   }
 
   formatCurrency(v: number): string {
-    return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    return (v ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
 
   rankClass(i: number): string {

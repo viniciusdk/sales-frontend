@@ -10,8 +10,8 @@ export class ProductsFacade {
   private toast   = inject(ToastService);
   private loading = inject(LoadingService);
 
-  readonly products  = signal<Product[]>([]);
-  readonly selected  = signal<Product | null>(null);
+  readonly products   = signal<Product[]>([]);
+  readonly selected   = signal<Product | null>(null);
   readonly submitting = signal(false);
 
   loadAll(): void {
@@ -25,8 +25,11 @@ export class ProductsFacade {
 
   loadById(id: string): void {
     this.loading.show();
-    this.svc.getById(id).subscribe({
-      next:     p => this.selected.set(p ?? null),
+    this.svc.getAll().subscribe({
+      next: products => {
+        this.products.set(products);
+        this.selected.set(products.find(p => p.id === id) ?? null);
+      },
       error:    () => this.toast.error('Produto não encontrado.'),
       complete: () => this.loading.hide(),
     });
@@ -66,6 +69,19 @@ export class ProductsFacade {
         this.toast.success('Produto removido.');
       },
       error:    () => this.toast.error('Erro ao remover produto.'),
+      complete: () => this.loading.hide(),
+    });
+  }
+
+  importCsv(file: File, onSuccess?: (count: number) => void): void {
+    this.loading.show();
+    this.svc.importCsv(file).subscribe({
+      next: res => {
+        this.toast.success(`${res.imported} produto(s) importado(s) com sucesso!`);
+        onSuccess?.(res.imported);
+        this.loadAll();
+      },
+      error:    () => this.toast.error('Erro ao importar produtos.'),
       complete: () => this.loading.hide(),
     });
   }

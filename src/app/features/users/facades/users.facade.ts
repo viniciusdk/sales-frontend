@@ -49,7 +49,10 @@ export class UsersFacade {
   }
 
   toggleActive(id: string): void {
-    this.svc.toggleActive(id).subscribe({
+    const user = this.users().find(u => u.id === id);
+    if (!user) return;
+    const form: UserForm = { name: user.name, email: user.email, role: user.role, active: !user.active };
+    this.svc.update(id, form).subscribe({
       next: u => {
         this.users.update(list => list.map(x => x.id === id ? u : x));
         this.toast.success(u.active ? 'Usuário ativado.' : 'Usuário desativado.');

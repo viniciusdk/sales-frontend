@@ -1,48 +1,35 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, delay } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { AppUser } from '../../../shared/models/user.model';
-
-let MOCK_USERS: AppUser[] = [
-  { id: '1', name: 'Valdete Alves',   email: 'admin@valdetmodas.com.br', role: 'admin',  active: true,  createdAt: '2026-01-10' },
-  { id: '2', name: 'Carla Souza',     email: 'carla@valdetmodas.com.br',  role: 'seller', active: true,  createdAt: '2026-02-15' },
-  { id: '3', name: 'Marcos Lima',     email: 'marcos@valdetmodas.com.br', role: 'seller', active: false, createdAt: '2026-03-01' },
-  { id: '4', name: 'Ana Paula Costa', email: 'ana@valdetmodas.com.br',    role: 'seller', active: true,  createdAt: '2026-04-05' },
-];
+import { environment } from '../../../../environments/environment';
 
 export interface UserForm {
   name: string;
   email: string;
   role: 'admin' | 'seller';
   active: boolean;
+  password?: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
+  private http = inject(HttpClient);
+  private readonly base = `${environment.apiUrl}/users`;
+
   getAll(): Observable<AppUser[]> {
-    return of([...MOCK_USERS]).pipe(delay(350));
+    return this.http.get<AppUser[]>(this.base);
   }
 
   create(form: UserForm): Observable<AppUser> {
-    const user: AppUser = { ...form, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
-    MOCK_USERS = [user, ...MOCK_USERS];
-    return of(user).pipe(delay(500));
+    return this.http.post<AppUser>(this.base, form);
   }
 
   update(id: string, form: UserForm): Observable<AppUser> {
-    const idx = MOCK_USERS.findIndex(u => u.id === id);
-    const updated: AppUser = { ...MOCK_USERS[idx], ...form };
-    MOCK_USERS[idx] = updated;
-    return of(updated).pipe(delay(500));
-  }
-
-  toggleActive(id: string): Observable<AppUser> {
-    const idx = MOCK_USERS.findIndex(u => u.id === id);
-    MOCK_USERS[idx] = { ...MOCK_USERS[idx], active: !MOCK_USERS[idx].active };
-    return of(MOCK_USERS[idx]).pipe(delay(300));
+    return this.http.put<AppUser>(`${this.base}/${id}`, form);
   }
 
   delete(id: string): Observable<void> {
-    MOCK_USERS = MOCK_USERS.filter(u => u.id !== id);
-    return of(undefined).pipe(delay(400));
+    return this.http.delete<void>(`${this.base}/${id}`);
   }
 }
